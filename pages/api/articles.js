@@ -4,6 +4,7 @@ import path from 'path';
 export default function handler(req, res) {
   const articlesDirectory = path.join(process.cwd(), 'Artigos');
 
+  // Lê todos os arquivos da pasta
   const files = fs.readdirSync(articlesDirectory);
 
   const articles = files.map((fileName) => {
@@ -11,7 +12,7 @@ export default function handler(req, res) {
     const fileContent = fs.readFileSync(filePath, 'utf8');
 
     return {
-      title: fileName.replace('.txt', ''),
+      title: fileName.replace('.md', ''),
       content: fileContent,
     };
   });

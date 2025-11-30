@@ -1,9 +1,11 @@
 import { getArticles } from '../services/api';
 
 export async function getServerSideProps() {
-  const articles = await getArticles();
-  return { props: { articles } };
-}
+  const baseUrl = process.env.VERCEL_URL 
+  ? `https://${process.env.VERCEL_URL}` 
+  : 'http://localhost:3000';
+
+const res = await fetch(`${baseUrl}/api/articles`);
 
 export default function Home({ articles }) {
   return (

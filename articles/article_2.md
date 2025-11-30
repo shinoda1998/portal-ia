@@ -1,0 +1,3 @@
+# Artigo SEO 2
+
+Conteúdo resumido...

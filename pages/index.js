@@ -9,7 +9,7 @@ export default function Home() {
       fontSize: "24px",
       fontFamily: "Arial",
     }}>
-      <h1>Bem-vindo ao Portal IA</h1>
+      <h1>Bem-vindo à Central IA Brasil</h1>
     </div>
   );
 }

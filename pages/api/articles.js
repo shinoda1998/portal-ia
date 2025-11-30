@@ -1,34 +1,26 @@
-// pages/api/articles.js
-import fs from 'fs';
-import path from 'path';
+import fs from "fs";
+import path from "path";
 
 export default function handler(req, res) {
   try {
-    // Caminho correto para arquivos públicos
-    const articlesDirectory = path.join(process.cwd(), 'public', 'articles');
+    // Caminho correto dos artigos dentro de /public/articles
+    const articlesPath = path.join(process.cwd(), "public", "articles");
 
-    // Se a pasta não existir, retorna lista vazia (não erro 500)
-    if (!fs.existsSync(articlesDirectory)) {
-      return res.status(200).json([]);
-    }
+    // Lê todos os arquivos .md
+    const files = fs.readdirSync(articlesPath);
 
-    // Ler arquivos .md apenas
-    const files = fs.readdirSync(articlesDirectory).filter(f => f.toLowerCase().endsWith('.md'));
+    const articles = files
+      .filter((file) => file.endsWith(".md"))
+      .map((file) => {
+        const content = fs.readFileSync(path.join(articlesPath, file), "utf8");
+        return {
+          title: file.replace(".md", ""),
+          content,
+        };
+      });
 
-    const articles = files.map((fileName) => {
-      const filePath = path.join(articlesDirectory, fileName);
-      const fileContent = fs.readFileSync(filePath, 'utf8');
-
-      return {
-        title: fileName.replace(/\.md$/i, ''),
-        content: fileContent,
-      };
-    });
-
-    return res.status(200).json(articles);
+    res.status(200).json(articles);
   } catch (error) {
-    console.error('API /api/articles error:', error);
-    // Em caso de erro inesperado, retorna 200 com lista vazia e loga no servidor
-    return res.status(200).json([]);
+    res.status(500).json({ error: "Erro ao carregar artigos" });
   }
 }
